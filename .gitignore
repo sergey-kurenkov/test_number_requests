@@ -13,3 +13,10 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+.idea/
+internal/counter/counter.txt
+internal/http_server/counter.txt
+counter.txt
+number_requests
+
