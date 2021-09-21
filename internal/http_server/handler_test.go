@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"github.com/sergey-kurenkov/test_number_requests/internal/counter"
 	"testing"
 	"time"
+
+	"github.com/sergey-kurenkov/test_number_requests/internal/counter"
 )
 
 func TestNumberRequests(t *testing.T) {

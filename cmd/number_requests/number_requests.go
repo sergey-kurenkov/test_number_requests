@@ -7,8 +7,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/sergey-kurenkov/test_number_requests/internal/http_server"
 	"time"
+
+	"github.com/sergey-kurenkov/test_number_requests/internal/http_server"
 )
 
 const (

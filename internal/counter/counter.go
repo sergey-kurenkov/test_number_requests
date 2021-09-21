@@ -52,7 +52,12 @@ func (c *Counter) removeOldEntries() {
 			close(c.stoppedCounter)
 			return
 		case <-tc.C:
-			c.removeOld()
+			func() {
+				c.mt.Lock()
+				defer c.mt.Unlock()
+
+				c.removeOld()
+			}()
 		}
 	}
 }

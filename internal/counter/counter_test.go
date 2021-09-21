@@ -99,7 +99,7 @@ func TestEviction(t *testing.T) {
 			t.Error(n)
 		}
 
-		time.Sleep(time.Second)
+		time.Sleep(1500 * time.Millisecond)
 
 		n = c.Size()
 		if n != 0 {

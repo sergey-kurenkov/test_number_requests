@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/sergey-kurenkov/test_number_requests/internal/counter"
 	"time"
+
+	"github.com/sergey-kurenkov/test_number_requests/internal/counter"
 )
 
 type Application struct {
@@ -17,7 +18,7 @@ func NewGetNumberRequestsApp(duration time.Duration) *Application {
 		counter: counter.NewCounter(duration),
 	}
 
-	if err:= app.counter.Start(); err != nil {
+	if err := app.counter.Start(); err != nil {
 		log.Fatal(err)
 	}
 
