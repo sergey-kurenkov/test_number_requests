@@ -6,7 +6,9 @@ import (
 )
 
 func TestEmptyCounter(t *testing.T) {
-	RemoveDataFile()
+	if err := RemoveDataFile(); err != nil {
+		t.Fatal(err)
+	}
 
 	c := NewCounter(60 * time.Second)
 
@@ -22,7 +24,9 @@ func TestEmptyCounter(t *testing.T) {
 }
 
 func TestNotEmptyStartStop(t *testing.T) {
-	RemoveDataFile()
+	if err := RemoveDataFile(); err != nil {
+		t.Fatal(err)
+	}
 
 	func() {
 		c := NewCounter(60 * time.Second)
@@ -79,7 +83,9 @@ func TestNotEmptyStartStop(t *testing.T) {
 }
 
 func TestEviction(t *testing.T) {
-	RemoveDataFile()
+	if err := RemoveDataFile(); err != nil {
+		t.Fatal(err)
+	}
 
 	func() {
 		c := NewCounter(1 * time.Second)
@@ -114,7 +120,9 @@ func TestEviction(t *testing.T) {
 }
 
 func TestEvictionOnLoad(t *testing.T) {
-	RemoveDataFile()
+	if err := RemoveDataFile(); err != nil {
+		t.Fatal(err)
+	}
 
 	func() {
 		c := NewCounter(1 * time.Second)

@@ -12,7 +12,9 @@ import (
 )
 
 func TestNumberRequests(t *testing.T) {
-	counter.RemoveDataFile()
+	if err := counter.RemoveDataFile(); err != nil {
+		t.Fatal(err)
+	}
 
 	func() {
 		app := NewGetNumberRequestsApp(60 * time.Second)

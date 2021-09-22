@@ -100,12 +100,12 @@ func (c *Counter) removeOld() {
 }
 
 const (
-	CounterFileName string      = "./counter.txt"
+	counterFileName string      = "./counter.txt"
 	defaultFilePerm os.FileMode = 0o644
 )
 
 func (c *Counter) readOnStart() error {
-	file, err := os.OpenFile(CounterFileName, os.O_RDONLY, defaultFilePerm)
+	file, err := os.OpenFile(counterFileName, os.O_RDONLY, defaultFilePerm)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
@@ -148,7 +148,7 @@ func (c *Counter) writeOnExit() error {
 	c.mt.Lock()
 	defer c.mt.Unlock()
 
-	file, err := os.OpenFile(CounterFileName, os.O_CREATE|os.O_WRONLY, defaultFilePerm)
+	file, err := os.OpenFile(counterFileName, os.O_CREATE|os.O_WRONLY, defaultFilePerm)
 	if err != nil {
 		return err
 	}
@@ -169,6 +169,11 @@ func (c *Counter) writeOnExit() error {
 	return nil
 }
 
-func RemoveDataFile() {
-	os.Remove(CounterFileName)
+func RemoveDataFile() error {
+	err := os.Remove(counterFileName)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+
+	return err
 }
