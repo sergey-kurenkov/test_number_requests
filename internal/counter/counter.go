@@ -3,7 +3,9 @@ package counter
 import (
 	"bufio"
 	"container/list"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"sync"
 	"time"
@@ -44,7 +46,9 @@ func (c *Counter) Stop() error {
 }
 
 func (c *Counter) removeOldEntries() {
-	tc := time.NewTicker(100 * time.Millisecond)
+	const defaultCleaningInterval time.Duration = 100 * time.Millisecond
+
+	tc := time.NewTicker(defaultCleaningInterval)
 
 	for {
 		select {
@@ -65,6 +69,7 @@ func (c *Counter) removeOldEntries() {
 func (c *Counter) Size() int64 {
 	c.mt.Lock()
 	defer c.mt.Unlock()
+
 	return int64(c.reqTimes.Len())
 }
 
@@ -89,17 +94,26 @@ func (c *Counter) removeOld() {
 		}
 
 		c.reqTimes.Remove(front)
+
 		continue
 	}
 }
 
-const CounterFileName string = "./counter.txt"
+const (
+	CounterFileName string      = "./counter.txt"
+	defaultFilePerm os.FileMode = 0o644
+)
 
 func (c *Counter) readOnStart() error {
-	file, err := os.OpenFile(CounterFileName, os.O_RDONLY, 0o644)
-	if err != nil {
+	file, err := os.OpenFile(CounterFileName, os.O_RDONLY, defaultFilePerm)
+	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
+
+	if err != nil {
+		return err
+	}
+
 	defer file.Close()
 
 	l := list.New()
@@ -107,7 +121,7 @@ func (c *Counter) readOnStart() error {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		txt := scanner.Text()
-		if len(txt) == 0 {
+		if txt == "" {
 			continue
 		}
 
@@ -134,15 +148,17 @@ func (c *Counter) writeOnExit() error {
 	c.mt.Lock()
 	defer c.mt.Unlock()
 
-	file, err := os.OpenFile(CounterFileName, os.O_CREATE|os.O_WRONLY, 0o644)
+	file, err := os.OpenFile(CounterFileName, os.O_CREATE|os.O_WRONLY, defaultFilePerm)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
 	writer := bufio.NewWriter(file)
+
 	for e := c.reqTimes.Front(); e != nil; e = e.Next() {
 		ts := e.Value.(time.Time)
+
 		_, err := writer.WriteString(fmt.Sprintf("%s\n", ts.Format(time.RFC3339Nano)))
 		if err != nil {
 			return err

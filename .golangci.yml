@@ -1,0 +1,106 @@
+linters:
+  enable:
+    - bodyclose
+    - rowserrcheck
+    - gosec
+    #- interfacer
+    - unconvert
+    - goconst
+    - asciicheck
+    - misspell
+    - unparam
+    - prealloc
+    - gochecknoinits
+    - nakedret
+    #- maligned
+    - gochecknoglobals
+    - gofmt
+    - dogsled 
+    - lll
+    - goerr113
+    - gomnd
+    - gofumpt
+    - nestif
+    - noctx
+    - nolintlint
+    - whitespace
+    - funlen
+    - exportloopref
+    - gocritic
+    - stylecheck
+    - gocognit
+    - gocyclo
+    - goprintffuncname
+    - nolintlint
+    - dupl
+    - exhaustive
+    - wsl
+    - sqlclosecheck
+    - godox
+    - predeclared
+    - makezero
+    - ifshort
+    - durationcheck
+    - wastedassign
+    - nilerr
+    #- forcetypeassert
+    #- forbidigo
+    #- exhaustivestruct
+
+run:
+  timeout: 5m
+
+issues:
+  exclude:
+
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        - funlen
+        - dupl
+
+linters-settings:
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+    line-length: 100
+    # tab width in spaces. Default to 1.
+    tab-width: 2
+  dupl:
+    threshold: 100
+
+  exhaustive:
+    default-signifies-exhaustive: true
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc  
+  gocyclo:
+    min-complexity: 15
+  gomnd:
+    settings:
+      mnd:
+        # don't include the "operation" and "assign"
+        checks: argument,case,condition,return
+  govet:
+    check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+  maligned:
+    suggest-new: true

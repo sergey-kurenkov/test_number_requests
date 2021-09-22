@@ -1,4 +1,4 @@
-package http_server
+package app
 
 import (
 	"fmt"
@@ -40,7 +40,9 @@ func (app *Application) Handler() http.Handler {
 
 func (app *Application) handleGetNumberRequests(w http.ResponseWriter, r *http.Request) {
 	number := app.counter.OnRequest()
+
 	w.WriteHeader(http.StatusOK)
+
 	if _, err := fmt.Fprintf(w, "%d\n", number); err != nil {
 		log.Println(err)
 	}

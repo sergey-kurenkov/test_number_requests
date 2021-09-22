@@ -1,4 +1,4 @@
-package http_server
+package app
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ func TestNumberRequests(t *testing.T) {
 		srv := httptest.NewServer(app.Handler())
 		defer srv.Close()
 
-		res, err := http.Get(fmt.Sprintf("%s/get-number-requests", srv.URL))
+		res, err := http.Get(fmt.Sprintf("%s/get-number-requests", srv.URL)) // nolint:noctx
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -31,6 +31,7 @@ func TestNumberRequests(t *testing.T) {
 		}
 
 		defer res.Body.Close()
+
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			t.Fatal(err)
@@ -48,7 +49,7 @@ func TestNumberRequests(t *testing.T) {
 		srv := httptest.NewServer(app.Handler())
 		defer srv.Close()
 
-		res, err := http.Get(fmt.Sprintf("%s/get-number-requests", srv.URL))
+		res, err := http.Get(fmt.Sprintf("%s/get-number-requests", srv.URL)) // nolint:noctx
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -58,6 +59,7 @@ func TestNumberRequests(t *testing.T) {
 		}
 
 		defer res.Body.Close()
+
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			t.Fatal(err)
