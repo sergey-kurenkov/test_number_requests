@@ -6,6 +6,9 @@ build:
 test:
 	go test -v -count=1 ./internal/...
 
+testf:
+	go test -failfast -v -count=1 ./internal/...
+
 testr:
 	go test -race -v -count=1 ./internal/...
 
