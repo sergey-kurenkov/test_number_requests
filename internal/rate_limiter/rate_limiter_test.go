@@ -23,6 +23,7 @@ func TestRateLimit(t *testing.T) {
 
 	rl.OnFinishRequest()
 	l = rl.Filled()
+
 	if l != 1 {
 		t.Error(l)
 	}

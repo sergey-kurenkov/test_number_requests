@@ -17,6 +17,7 @@ func (rl *RateLimiter) Filled() int {
 	c := cap(rl.ch)
 	l := len(rl.ch)
 	f := c - l
+
 	return f
 }
 
