@@ -3,7 +3,7 @@ package rate_limiter
 import "sync/atomic"
 
 type RateLimiter struct {
-	ch chan struct{}
+	ch      chan struct{}
 	waiting int64
 }
 
@@ -33,5 +33,5 @@ func (rl *RateLimiter) AddRequest() {
 }
 
 func (rl *RateLimiter) OnFinishRequest() {
-	<- rl.ch
+	<-rl.ch
 }

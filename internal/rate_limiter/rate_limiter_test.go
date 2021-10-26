@@ -57,5 +57,4 @@ func TestRateLimit(t *testing.T) {
 	if w != 0 {
 		t.Error(w)
 	}
-
 }

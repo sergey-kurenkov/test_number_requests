@@ -2,22 +2,23 @@ package app
 
 import (
 	"fmt"
-	"github.com/sergey-kurenkov/test_number_requests/internal/rate_limiter"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/sergey-kurenkov/test_number_requests/internal/rate_limiter"
 
 	"github.com/sergey-kurenkov/test_number_requests/internal/counter"
 )
 
 type Application struct {
-	counter *counter.Counter
+	counter     *counter.Counter
 	rateLimiter *rate_limiter.RateLimiter
 }
 
 func NewGetNumberRequestsApp(duration time.Duration) *Application {
 	app := &Application{
-		counter: counter.NewCounter(duration),
+		counter:     counter.NewCounter(duration),
 		rateLimiter: rate_limiter.NewRateLimiter(5),
 	}
 
