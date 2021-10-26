@@ -17,9 +17,11 @@ type Application struct {
 }
 
 func NewGetNumberRequestsApp(duration time.Duration) *Application {
+	const defaultCapacity = 5
+
 	app := &Application{
 		counter:     counter.NewCounter(duration),
-		rateLimiter: rate_limiter.NewRateLimiter(5),
+		rateLimiter: rate_limiter.NewRateLimiter(defaultCapacity),
 	}
 
 	if err := app.counter.Start(); err != nil {
@@ -43,12 +45,14 @@ func (app *Application) Handler() http.Handler {
 }
 
 func (app *Application) handleGetNumberRequests(w http.ResponseWriter, r *http.Request) {
+	const defaultSleep = 2 * time.Second
+
 	app.rateLimiter.AddRequest()
 	defer app.rateLimiter.OnFinishRequest()
 
 	number := app.counter.OnRequest()
 
-	time.Sleep(2 * time.Second)
+	time.Sleep(defaultSleep)
 
 	w.WriteHeader(http.StatusOK)
 
