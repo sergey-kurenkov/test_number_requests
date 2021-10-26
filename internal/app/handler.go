@@ -45,9 +45,9 @@ func (app *Application) handleGetNumberRequests(w http.ResponseWriter, r *http.R
 	app.rateLimiter.AddRequest()
 	defer app.rateLimiter.OnFinishRequest()
 
-	time.Sleep(2 * time.Second)
-
 	number := app.counter.OnRequest()
+
+	time.Sleep(2 * time.Second)
 
 	w.WriteHeader(http.StatusOK)
 
