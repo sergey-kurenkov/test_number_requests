@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"github.com/sergey-kurenkov/test_number_requests/internal/rate_limiter"
 	"log"
 	"net/http"
 	"time"
@@ -11,11 +12,13 @@ import (
 
 type Application struct {
 	counter *counter.Counter
+	rateLimiter *rate_limiter.RateLimiter
 }
 
 func NewGetNumberRequestsApp(duration time.Duration) *Application {
 	app := &Application{
 		counter: counter.NewCounter(duration),
+		rateLimiter: rate_limiter.NewRateLimiter(5),
 	}
 
 	if err := app.counter.Start(); err != nil {
@@ -39,6 +42,11 @@ func (app *Application) Handler() http.Handler {
 }
 
 func (app *Application) handleGetNumberRequests(w http.ResponseWriter, r *http.Request) {
+	app.rateLimiter.AddRequest()
+	defer app.rateLimiter.OnFinishRequest()
+
+	time.Sleep(2 * time.Second)
+
 	number := app.counter.OnRequest()
 
 	w.WriteHeader(http.StatusOK)
